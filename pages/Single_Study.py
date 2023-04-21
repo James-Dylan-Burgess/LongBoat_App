@@ -2,12 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import xgboost
+import xgboost as xgb
 import csv
+import json
 
 
-
-model = pickle.load(open('LONGBOAT_Model.pkl','rb'))
+#model = pickle.load(open('LONGBOAT_Model.pkl','rb'))
+with open('LONGBOAT_Model.json','r') as f:
+    model_dict = json.load(f)
+model = xgb.Booster(model_file=None,model_buf=model_dict)
 run_model = False #Boolean that switches to true when run model button has been pressed
 
 
