@@ -8,9 +8,11 @@ import json
 
 
 #model = pickle.load(open('LONGBOAT_Model.pkl','rb'))
-with open('LONGBOAT_Model.json','r') as f:
-    model_dict = json.load(f)
-model = xgb.Booster(model_file=None,model_buf=model_dict)
+
+xbg_reg = xgb.Booster()
+
+model = xbg_reg.load_model("LONGBOAT_Model.json")
+
 run_model = False #Boolean that switches to true when run model button has been pressed
 
 
@@ -170,14 +172,21 @@ def run(model,data):
       
     cost = float_to_money_format(prediction)
     
+    Statement = "## Predicted cost for study {} is **{}**".format(IDs[0],cost)
+    st.markdown(Statement)
+    
+    return cost,IDs    
+    
+    
+    
+def save_cost(cost,IDs):
     file = open('Results.csv', 'w+', newline ='')
     with file:   
         write = csv.writer(file)
         header = ['ID','Predicted Cost (£)']
         write.writerow(header)
         write.writerow([IDs,cost])
-    Statement = "## Predicted cost for study {} is **{}**".format(IDs[0],cost)
-    st.markdown(Statement)
+    
     
     
 confirmed = False
